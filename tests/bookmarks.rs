@@ -6,6 +6,7 @@ mod tests {
 
     #[actix_web::test]
     async fn create_bookmark_unit() {
+        // let req = test::TestRequest::default().app_data();
         let resp = create_bookmark().await;
         assert_eq!(resp.status(), http::StatusCode::OK);
     }

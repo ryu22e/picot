@@ -3,7 +3,7 @@ mod tests {
     use actix_web::{http, http::header::ContentType, test, web, App};
 
     use picot::routes::create_bookmark;
-    use picot::routes::Bookmark;
+    use picot::routes::Response;
     use serde_json::json;
 
     #[actix_web::test]
@@ -20,7 +20,7 @@ mod tests {
             .to_request();
         let resp = test::call_service(&app, req).await;
         assert_eq!(resp.status(), http::StatusCode::OK);
-        let bookmark: Bookmark = test::read_body_json(resp).await;
+        let bookmark: Response = test::read_body_json(resp).await;
     }
 
     // #[actix_web::test]

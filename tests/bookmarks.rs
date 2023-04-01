@@ -4,11 +4,18 @@ mod tests {
 
     use picot::routes::create_bookmark;
     use picot::routes::Response;
+    use sea_orm::Database;
     use serde_json::json;
 
     #[actix_web::test]
     async fn create_bookmark_unit() {
-        let app = test::init_service(App::new().route("/", web::post().to(create_bookmark))).await;
+        let db = Database::connect("sqlite::memory:").await.unwrap();
+        let app = test::init_service(
+            App::new()
+                .app_data(db.clone())
+                .route("/", web::post().to(create_bookmark)),
+        )
+        .await;
         let payload = json!({
             "title": "test",
             "url": "https://example.com",

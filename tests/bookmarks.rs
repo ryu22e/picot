@@ -2,12 +2,24 @@
 mod tests {
     use actix_web::{http, http::header::ContentType, test, web, App};
 
+    //    use picot::entities::{bookmark, Entity as Bookmark};
     use picot::routes::create_bookmark;
+    use serde_json::json;
 
     #[actix_web::test]
     async fn create_bookmark_unit() {
         // let req = test::TestRequest::default().app_data();
-        let resp = create_bookmark().await;
+        let app = test::init_service(App::new().route("/", web::post().to(create_bookmark))).await;
+        let payload = json!({
+            "title": "test",
+            "url": "https://example.com",
+        });
+        let req = test::TestRequest::post()
+            .uri("/")
+            .set_payload(payload.to_string())
+            .insert_header(ContentType::json())
+            .to_request();
+        let resp = test::call_service(&app, req).await;
         assert_eq!(resp.status(), http::StatusCode::OK);
     }
 

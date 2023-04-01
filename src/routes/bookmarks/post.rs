@@ -5,8 +5,8 @@ use serde::Deserialize;
 pub struct Bookmark {
     title: String,
     url: String,
-    description: String,
-    tags: Vec<String>,
+    // description: String,
+    // tags: Vec<String>,
 }
 
 pub async fn create_bookmark(bookmark: web::Json<Bookmark>) -> HttpResponse {

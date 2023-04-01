@@ -1,3 +1,3 @@
 mod post;
 
-pub use post::create_bookmark;
+pub use post::*;

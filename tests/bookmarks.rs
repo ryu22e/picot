@@ -19,6 +19,8 @@ mod tests {
         let payload = json!({
             "title": "test",
             "url": "https://example.com",
+            "description": "test data",
+            "tags": ["test1", "test2"],
         });
         let req = test::TestRequest::post()
             .uri("/")

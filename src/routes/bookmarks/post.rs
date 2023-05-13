@@ -1,4 +1,6 @@
+use crate::entities::bookmark;
 use actix_web::{web, Responder, Result};
+use sea_orm::Database;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
@@ -20,13 +22,22 @@ pub struct Response {
     pub tags: Vec<String>,
 }
 
-pub async fn create_bookmark(bookmark: web::Json<Bookmark>) -> Result<impl Responder> {
+pub async fn create_bookmark(form: web::Json<Bookmark>) -> Result<impl Responder> {
+    // bookmark::ActiveModel {
+    //     title: Set(form.title.clone()),
+    //     url: Set(form.url.clone()),
+    //     description: Set(form.description.clone()),
+    //     tags: Set(form.tags.clone()),
+    //     ..Default::default()
+    // }
+    // .save(db)
+    // .await?;
     let obj = Response {
         id: 1,
-        title: bookmark.title.clone(),
-        url: bookmark.url.clone(),
-        description: bookmark.description.clone(),
-        tags: bookmark.tags.clone(),
+        title: form.title.clone(),
+        url: form.url.clone(),
+        description: form.description.clone(),
+        tags: form.tags.clone(),
     };
     Ok(web::Json(obj))
 }

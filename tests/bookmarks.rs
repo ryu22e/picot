@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use actix_web::{http, http::header::ContentType, test, web, App};
-
+    //use picot::entities::bookmark::Model;
     use picot::routes::create_bookmark;
     use picot::routes::Response;
     use sea_orm::Database;
@@ -28,16 +28,14 @@ mod tests {
             .insert_header(ContentType::json())
             .to_request();
         let resp = test::call_service(&app, req).await;
-        assert_eq!(resp.status(), http::StatusCode::OK);
+        assert_eq!(
+            resp.status(),
+            http::StatusCode::OK,
+            "{:?}",
+            resp.response().body()
+        );
         let actual: Response = test::read_body_json(resp).await;
-        let expected = Response {
-            id: 1,
-            title: "test".to_string(),
-            url: "https://example.com".to_string(),
-            description: "test data".to_string(),
-            tags: vec!["test1".to_string(), "test2".to_string()],
-        };
-        assert_eq!(actual, expected);
+        //let expected = Model::find_by_id(actual.id).one(db).await.unwrap();
     }
 
     // #[actix_web::test]

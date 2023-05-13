@@ -2,6 +2,7 @@
 mod tests {
     use actix_web::{http, http::header::ContentType, test, web, App};
     //use picot::entities::bookmark::Model;
+    use picot::app_state::AppState;
     use picot::routes::create_bookmark;
     use picot::routes::Response;
     use sea_orm::Database;
@@ -9,10 +10,11 @@ mod tests {
 
     #[actix_web::test]
     async fn create_bookmark_unit() {
-        let db = Database::connect("sqlite::memory:").await.unwrap();
+        let conn = Database::connect("sqlite::memory:").await.unwrap();
+        let state = AppState { conn: conn };
         let app = test::init_service(
             App::new()
-                .app_data(db.clone())
+                .app_data(web::Data::new(state))
                 .route("/", web::post().to(create_bookmark)),
         )
         .await;

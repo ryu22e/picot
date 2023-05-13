@@ -29,7 +29,15 @@ mod tests {
             .to_request();
         let resp = test::call_service(&app, req).await;
         assert_eq!(resp.status(), http::StatusCode::OK);
-        let bookmark: Response = test::read_body_json(resp).await;
+        let actual: Response = test::read_body_json(resp).await;
+        let expected = Response {
+            id: 1,
+            title: "test".to_string(),
+            url: "https://example.com".to_string(),
+            description: "test data".to_string(),
+            tags: vec!["test1".to_string(), "test2".to_string()],
+        };
+        assert_eq!(actual, expected);
     }
 
     // #[actix_web::test]

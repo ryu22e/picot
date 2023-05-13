@@ -11,13 +11,13 @@ pub struct Bookmark {
     tags: Vec<String>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Response {
-    id: u32,
-    title: String,
-    url: String,
-    description: String,
-    tags: Vec<String>,
+    pub id: u32,
+    pub title: String,
+    pub url: String,
+    pub description: String,
+    pub tags: Vec<String>,
 }
 
 pub async fn create_bookmark(bookmark: web::Json<Bookmark>) -> Result<impl Responder> {

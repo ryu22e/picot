@@ -1,3 +1,4 @@
+use crate::app_state::AppState;
 use crate::entities::bookmark;
 use actix_web::{web, Responder, Result};
 use sea_orm::Database;
@@ -22,7 +23,10 @@ pub struct Response {
     pub tags: Vec<String>,
 }
 
-pub async fn create_bookmark(form: web::Json<Bookmark>) -> Result<impl Responder> {
+pub async fn create_bookmark(
+    data: web::Data<AppState>,
+    form: web::Json<Bookmark>,
+) -> Result<impl Responder> {
     // bookmark::ActiveModel {
     //     title: Set(form.title.clone()),
     //     url: Set(form.url.clone()),

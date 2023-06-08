@@ -2,7 +2,6 @@ use crate::app_state::AppState;
 use crate::entities::bookmark;
 use actix_web::{web, Responder, Result};
 use sea_orm::ActiveValue::Set;
-use sea_orm::Database;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
@@ -34,7 +33,7 @@ pub async fn create_bookmark(
         url: Set(form.url.to_owned()),
         ..Default::default()
     };
-    //bookmark::Entity::insert(b).exec(conn).await?;
+    // b.save(conn).await?;
     let obj = Response {
         id: 1,
         title: form.title.clone(),

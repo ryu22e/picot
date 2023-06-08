@@ -30,8 +30,8 @@ pub async fn create_bookmark(
 ) -> Result<impl Responder> {
     let conn = &data.conn;
     let b = bookmark::ActiveModel {
-        title: Set(form.title.clone()),
-        url: Set(form.url.clone()),
+        title: Set(form.title.to_owned()),
+        url: Set(form.url.to_owned()),
         ..Default::default()
     };
     //bookmark::Entity::insert(b).exec(conn).await?;

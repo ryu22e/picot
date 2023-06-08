@@ -1,7 +1,8 @@
 use crate::app_state::AppState;
 use crate::entities::bookmark;
 use actix_web::{web, Responder, Result};
-use sea_orm::{Database, Set};
+use sea_orm::ActiveValue::Set;
+use sea_orm::Database;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]

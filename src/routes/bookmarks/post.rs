@@ -1,26 +1,25 @@
 use crate::app_state::AppState;
 use crate::entities::bookmark;
 use actix_web::{web, Responder, Result};
-use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct Bookmark {
     title: String,
     url: String,
-    #[serde(default = "String::new")]
-    description: String,
-    #[serde(default)]
-    tags: Vec<String>,
+    // #[serde(default = "String::new")]
+    // description: String,
+    // #[serde(default)]
+    // tags: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Response {
-    pub id: u32,
+    pub id: i32,
     pub title: String,
     pub url: String,
-    pub description: String,
-    pub tags: Vec<String>,
+    // pub description: String,
+    // pub tags: Vec<String>,
 }
 
 pub async fn create_bookmark(
@@ -28,18 +27,16 @@ pub async fn create_bookmark(
     form: web::Json<Bookmark>,
 ) -> Result<impl Responder> {
     let conn = &data.conn;
-    let b = bookmark::ActiveModel {
-        title: Set(form.title.to_owned()),
-        url: Set(form.url.to_owned()),
-        ..Default::default()
-    };
-    // b.save(conn).await?;
+    let model =
+        bookmark::create_bookmark(form.title.to_owned(), form.url.to_owned(), conn.to_owned())
+            .await
+            .expect("Failed to create bookmark");
     let obj = Response {
-        id: 1,
-        title: form.title.clone(),
-        url: form.url.clone(),
-        description: form.description.clone(),
-        tags: form.tags.clone(),
+        id: model.id.unwrap(),
+        title: model.title.unwrap(),
+        url: model.url.unwrap(),
+        // description: "".to_string(),
+        // tags: form.tags.clone(),
     };
     Ok(web::Json(obj))
 }

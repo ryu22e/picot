@@ -1,17 +1,18 @@
 #[cfg(test)]
 mod tests {
     use actix_web::{http, http::header::ContentType, test, web, App};
-    //use picot::entities::bookmark::Model;
     use picot::app_state::AppState;
     use picot::routes::create_bookmark;
     use picot::routes::Response;
+    use picot::schema::setup_schema;
     use sea_orm::Database;
     use serde_json::json;
 
     #[actix_web::test]
     async fn create_bookmark_unit() {
-        let conn = Database::connect("sqlite::memory:").await.unwrap();
-        let state = AppState { conn: conn };
+        let db = Database::connect("sqlite::memory:").await.unwrap();
+        setup_schema(&db).await.unwrap();
+        let state = AppState { conn: db };
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(state))

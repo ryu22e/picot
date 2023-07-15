@@ -38,7 +38,8 @@ mod tests {
             resp.response().body()
         );
         let actual: Response = test::read_body_json(resp).await;
-        //let expected = Model::find_by_id(actual.id).one(db).await.unwrap();
+        assert_eq!(actual.title, "test");
+        assert_eq!(actual.url, "https://example.com");
     }
 
     // #[actix_web::test]

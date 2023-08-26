@@ -1,17 +1,8 @@
 use crate::app_state::AppState;
 use crate::entities::bookmark;
+use crate::mutation::bookmark::Mutation;
 use actix_web::{web, Responder, Result};
 use serde::{Deserialize, Serialize};
-
-#[derive(Deserialize)]
-pub struct Bookmark {
-    title: String,
-    url: String,
-    // #[serde(default = "String::new")]
-    // description: String,
-    #[serde(default)]
-    tags: Vec<String>,
-}
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Response {
@@ -24,19 +15,19 @@ pub struct Response {
 
 pub async fn create_bookmark(
     data: web::Data<AppState>,
-    form: web::Json<Bookmark>,
+    post_form: web::Json<bookmark::Model>,
 ) -> Result<impl Responder> {
     let conn = &data.conn;
-    let model =
-        bookmark::create_bookmark(form.title.to_owned(), form.url.to_owned(), conn.to_owned())
-            .await
-            .expect("Failed to create bookmark");
+    let form = post_form.into_inner();
+    let model = Mutation::create_bookmark(conn, form)
+        .await
+        .expect("could not insert bookmark");
     let obj = Response {
         id: model.id.unwrap(),
         title: model.title.unwrap(),
         url: model.url.unwrap(),
         // tags: model.tags.unwrap(),
-        tags: vec![],
+        tags: vec!["test1".to_string(), "test2".to_string()],
         // description: "".to_string(),
     };
     Ok(web::Json(obj))

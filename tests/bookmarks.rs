@@ -40,6 +40,7 @@ mod tests {
         let actual: Response = test::read_body_json(resp).await;
         assert_eq!(actual.title, "test");
         assert_eq!(actual.url, "https://example.com");
+        assert_eq!(actual.tags, vec!["test1", "test2"]);
     }
 
     // #[actix_web::test]

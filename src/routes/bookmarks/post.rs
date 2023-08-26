@@ -9,8 +9,8 @@ pub struct Bookmark {
     url: String,
     // #[serde(default = "String::new")]
     // description: String,
-    // #[serde(default)]
-    // tags: Vec<String>,
+    #[serde(default)]
+    tags: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -19,7 +19,7 @@ pub struct Response {
     pub title: String,
     pub url: String,
     // pub description: String,
-    // pub tags: Vec<String>,
+    pub tags: Vec<String>,
 }
 
 pub async fn create_bookmark(
@@ -35,8 +35,9 @@ pub async fn create_bookmark(
         id: model.id.unwrap(),
         title: model.title.unwrap(),
         url: model.url.unwrap(),
+        // tags: model.tags.unwrap(),
+        tags: vec![],
         // description: "".to_string(),
-        // tags: form.tags.clone(),
     };
     Ok(web::Json(obj))
 }

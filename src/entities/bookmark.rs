@@ -12,7 +12,23 @@ pub struct Model {
     // TODO Tagを追加する
 }
 
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+#[derive(Copy, Clone, Debug, EnumIter)]
+pub enum Relation {
+    Tag,
+}
+
+impl RelationTrait for Relation {
+    fn def(&self) -> RelationDef {
+        match self {
+            Self::Tag => Entity::has_one(super::tag::Entity).into(),
+        }
+    }
+}
+
+impl Related<super::tag::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Tag.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}

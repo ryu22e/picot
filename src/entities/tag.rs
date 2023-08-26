@@ -11,7 +11,26 @@ pub struct Model {
     pub name: String,
 }
 
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+#[derive(Copy, Clone, Debug, EnumIter)]
+pub enum Relation {
+    Bookmark,
+}
+
+impl RelationTrait for Relation {
+    fn def(&self) -> RelationDef {
+        match self {
+            Self::Bookmark => Entity::belongs_to(super::bookmark::Entity)
+                .from(Column::Id)
+                .to(super::bookmark::Column::Id)
+                .into(),
+        }
+    }
+}
+
+impl Related<super::bookmark::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Bookmark.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}

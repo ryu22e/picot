@@ -6,6 +6,7 @@ use std::io::Error;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // TODO ファイルパスを指定する
     let db = Database::connect("sqlite::memory:")
         .await
         .map_err(|e| Error::new(std::io::ErrorKind::Other, e))?;

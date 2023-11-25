@@ -6,9 +6,6 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration scripts
-        todo!();
-
         manager
             .create_table(
                 Table::create()
@@ -22,16 +19,19 @@ impl MigrationTrait for Migration {
                             .primary_key(),
                     )
                     .col(ColumnDef::new(Post::Title).string().not_null())
-                    .col(ColumnDef::new(Post::Text).string().not_null())
+                    .col(ColumnDef::new(Post::Url).string().not_null())
+                    .col(
+                        ColumnDef::new(Post::Description)
+                            .string()
+                            .not_null()
+                            .default(""),
+                    )
                     .to_owned(),
             )
             .await
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration scripts
-        todo!();
-
         manager
             .drop_table(Table::drop().table(Post::Table).to_owned())
             .await
@@ -44,5 +44,6 @@ enum Post {
     Table,
     Id,
     Title,
-    Text,
+    Url,
+    Description,
 }

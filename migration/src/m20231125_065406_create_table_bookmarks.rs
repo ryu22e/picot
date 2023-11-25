@@ -1,4 +1,3 @@
-use crate::m20231125_065410_create_table_tags::Tag;
 use sea_orm_migration::prelude::*;
 
 #[derive(DeriveMigrationName)]
@@ -27,11 +26,6 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .default(""),
                     )
-                    .foreign_key(
-                        ForeignKey::create()
-                            .from(Bookmark::Table, Bookmark::Id)
-                            .to(Tag::Table, Tag::Id),
-                    )
                     .to_owned(),
             )
             .await
@@ -46,7 +40,7 @@ impl MigrationTrait for Migration {
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum Bookmark {
+pub enum Bookmark {
     Table,
     Id,
     Title,

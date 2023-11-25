@@ -9,16 +9,16 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(Post::Table)
+                    .table(Tag::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Post::Id)
+                        ColumnDef::new(Tag::Id)
                             .integer()
                             .not_null()
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(Post::Name).string().not_null().unique_key())
+                    .col(ColumnDef::new(Tag::Name).string().not_null().unique_key())
                     .to_owned(),
             )
             .await
@@ -26,14 +26,14 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Post::Table).to_owned())
+            .drop_table(Table::drop().table(Tag::Table).to_owned())
             .await
     }
 }
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum Post {
+pub enum Tag {
     Table,
     Id,
     Name,

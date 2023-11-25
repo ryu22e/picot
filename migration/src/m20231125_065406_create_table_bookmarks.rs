@@ -1,3 +1,4 @@
+use crate::m20231125_065410_create_table_tags::Tag;
 use sea_orm_migration::prelude::*;
 
 #[derive(DeriveMigrationName)]
@@ -9,22 +10,27 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(Post::Table)
+                    .table(Bookmark::Table)
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(Post::Id)
+                        ColumnDef::new(Bookmark::Id)
                             .integer()
                             .not_null()
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(Post::Title).string().not_null())
-                    .col(ColumnDef::new(Post::Url).string().not_null())
+                    .col(ColumnDef::new(Bookmark::Title).string().not_null())
+                    .col(ColumnDef::new(Bookmark::Url).string().not_null())
                     .col(
-                        ColumnDef::new(Post::Description)
+                        ColumnDef::new(Bookmark::Description)
                             .string()
                             .not_null()
                             .default(""),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(Bookmark::Table, Bookmark::Id)
+                            .to(Tag::Table, Tag::Id),
                     )
                     .to_owned(),
             )
@@ -33,14 +39,14 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Post::Table).to_owned())
+            .drop_table(Table::drop().table(Bookmark::Table).to_owned())
             .await
     }
 }
 
 /// Learn more at https://docs.rs/sea-query#iden
 #[derive(Iden)]
-enum Post {
+enum Bookmark {
     Table,
     Id,
     Title,

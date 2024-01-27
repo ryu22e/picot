@@ -24,7 +24,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Bookmark::Description)
                             .string()
                             .not_null()
-                            .default(Value::String(None)),
+                            .default(Value::String(Some(Box::new("".to_string())))),
                     )
                     .to_owned(),
             )

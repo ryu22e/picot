@@ -9,7 +9,7 @@ pub struct Response {
     pub id: i32,
     pub title: String,
     pub url: String,
-    // pub description: String,
+    pub description: String,
     pub tags: Vec<String>,
 }
 
@@ -29,7 +29,7 @@ pub async fn create_bookmark(
         // tags: model.tags.unwrap(),
         // TODO DBから取得する
         tags: vec!["test1".to_string(), "test2".to_string()],
-        // description: "".to_string(),
+        description: model.description.unwrap(),
     };
     Ok(web::Json(obj))
 }

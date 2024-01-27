@@ -41,6 +41,7 @@ mod tests {
         assert_eq!(actual.title, "test");
         assert_eq!(actual.url, "https://example.com");
         assert_eq!(actual.tags, vec!["test1", "test2"]);
+        assert_eq!(actual.description, "test data");
     }
 
     // #[actix_web::test]

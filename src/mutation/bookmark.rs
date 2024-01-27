@@ -13,6 +13,7 @@ impl Mutation {
         let model = Bookmark {
             title: Set(form_data.title.to_owned()),
             url: Set(form_data.url.to_owned()),
+            description: Set(form_data.description.to_owned()),
             ..Default::default()
         }
         .save(conn)

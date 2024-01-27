@@ -11,3 +11,5 @@ Cargo.lock
 
 # cargo-tarpaulin
 cobertura.xml
+
+db.sqlite

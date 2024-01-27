@@ -44,6 +44,40 @@ mod tests {
         assert_eq!(actual.description, "test data");
     }
 
+    #[actix_web::test]
+    async fn create_bookmark_unit_without_description() {
+        let db = Database::connect("sqlite::memory:").await.unwrap();
+        setup_schema(&db).await.unwrap();
+        let state = AppState { conn: db };
+        let app = test::init_service(
+            App::new()
+                .app_data(web::Data::new(state))
+                .route("/", web::post().to(create_bookmark)),
+        )
+        .await;
+        let payload = json!({
+            "title": "test",
+            "url": "https://example.com",
+            "tags": ["test1", "test2"],
+        });
+        let req = test::TestRequest::post()
+            .uri("/")
+            .set_payload(payload.to_string())
+            .insert_header(ContentType::json())
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert_eq!(
+            resp.status(),
+            http::StatusCode::OK,
+            "{:?}",
+            resp.response().body()
+        );
+        let actual: Response = test::read_body_json(resp).await;
+        assert_eq!(actual.title, "test");
+        assert_eq!(actual.url, "https://example.com");
+        assert_eq!(actual.tags, vec!["test1", "test2"]);
+        assert_eq!(actual.description, "");
+    }
     // #[actix_web::test]
     // async fn test_home_get() {
     //     let app = test::init_service(App::new().route("/", web::get().to(home))).await;

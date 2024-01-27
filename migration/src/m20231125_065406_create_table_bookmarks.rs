@@ -24,7 +24,7 @@ impl MigrationTrait for Migration {
                         ColumnDef::new(Bookmark::Description)
                             .string()
                             .not_null()
-                            .default("".to_owned()),
+                            .defautl(Value::String("".to_string()),
                     )
                     .to_owned(),
             )
@@ -45,5 +45,6 @@ pub enum Bookmark {
     Id,
     Title,
     Url,
+    #[sea_orm(default)]
     Description,
 }
